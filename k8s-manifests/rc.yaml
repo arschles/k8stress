@@ -1,0 +1,29 @@
+#helm:generate helm template -o $HELM_GENERATE_DIR/manifests/deis-builder-rc.yaml -d $HELM_GENERATE_DIR/tpl/objectstorage.toml $HELM_GENERATE_DIR/tpl/deis-builder-rc.yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: k8stress
+  namespace: k8stress
+  labels:
+    heritage: deis
+spec:
+  replicas: 10
+  selector:
+    app: k8stress
+  template:
+    metadata:
+      labels:
+        app: k8stress
+    spec:
+      serviceAccount: deis-builder
+      containers:
+        - name: k8stress
+          image: quay.io/arschles/k8stress:devel
+          imagePullPolicy: Always
+          env:
+            - name: "NUM_GOROUTINES"
+              value: "10000"
+            - name: "NAMESPACE"
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
