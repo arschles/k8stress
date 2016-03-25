@@ -15,7 +15,6 @@ spec:
       labels:
         app: k8stress
     spec:
-      serviceAccount: deis-builder
       containers:
         - name: k8stress
           image: quay.io/arschles/k8stress:devel
