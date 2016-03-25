@@ -5,7 +5,7 @@ metadata:
   name: k8stress
   namespace: k8stress
   labels:
-    heritage: deis
+    heritage: k8stress
 spec:
   replicas: 10
   selector:
@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: "NUM_GOROUTINES"
-              value: "10000"
+              value: "1000"
             - name: "NAMESPACE"
               valueFrom:
                 fieldRef:
