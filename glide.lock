@@ -1,5 +1,5 @@
-hash: 07c63710aa4111fc387b7e0695ccba8c1b82759c77573caace0d02171c6250cb
-updated: 2016-03-25T08:42:56.704893886-07:00
+hash: 43867226ce3b35258fe576ad013a6ef20c7d1ac92a2a48b8c1931e8dcbe85bc2
+updated: 2016-03-25T12:44:45.270955033-07:00
 imports:
 - name: bitbucket.org/ww/goautoneg
   version: 75cd24fc2f2c
@@ -110,40 +110,40 @@ imports:
   subpackages:
   - pkg/client/unversioned
   - pkg/api
+  - pkg/api/meta
+  - pkg/api/resource
+  - pkg/api/unversioned
+  - pkg/auth/user
+  - pkg/conversion
+  - pkg/fields
+  - pkg/labels
+  - pkg/runtime
+  - pkg/types
+  - pkg/util
+  - pkg/util/rand
+  - pkg/util/sets
   - pkg/api/errors
   - pkg/api/install
   - pkg/api/latest
-  - pkg/api/meta
-  - pkg/api/unversioned
   - pkg/api/validation
   - pkg/apis/extensions
   - pkg/apis/extensions/install
   - pkg/client/metrics
   - pkg/conversion/queryparams
-  - pkg/fields
-  - pkg/labels
-  - pkg/runtime
-  - pkg/util
-  - pkg/util/sets
   - pkg/util/wait
   - pkg/version
   - pkg/watch
   - pkg/watch/json
-  - pkg/api/resource
-  - pkg/auth/user
-  - pkg/conversion
-  - pkg/types
-  - pkg/util/rand
-  - pkg/util/errors
+  - third_party/forked/reflect
   - pkg/util/fielderrors
+  - pkg/util/validation
+  - pkg/util/yaml
+  - pkg/util/errors
   - pkg/api/registered
   - pkg/api/util
   - pkg/api/v1
   - pkg/capabilities
-  - pkg/util/validation
-  - pkg/util/yaml
   - pkg/apis/extensions/v1beta1
-  - third_party/forked/reflect
 - name: speter.net/go/exp/math/dec/inf
   version: 42ca6cd68aa922bc3f32f1e056e61b65945d9ad7
 devImports: []
