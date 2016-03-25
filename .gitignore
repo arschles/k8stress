@@ -22,3 +22,5 @@ _testmain.go
 *.exe
 *.test
 *.prof
+k8stress
+rootfs/bin/k8stress
