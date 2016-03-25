@@ -13,5 +13,5 @@ type Config struct {
 }
 
 func (c Config) String() string {
-	return fmt.Sprintf("Num Goroutines = %d, Namespace = %s", c.NumGoroutines, c.Namespace)
+	return fmt.Sprintf("Num Goroutines = %d, Namespace = %s, runtime = %ds", c.NumGoroutines, c.Namespace, c.TimeSec)
 }
