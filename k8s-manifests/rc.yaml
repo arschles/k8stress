@@ -20,7 +20,9 @@ spec:
           imagePullPolicy: Always
           env:
             - name: "NUM_GOROUTINES"
-              value: "1000"
+              value: "10"
+            - name: "TIME_SEC"
+              value: "10"
             - name: "NAMESPACE"
               valueFrom:
                 fieldRef:
