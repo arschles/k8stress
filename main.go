@@ -14,11 +14,16 @@ import (
 	kcl "k8s.io/kubernetes/pkg/client/unversioned"
 )
 
+func i64(i int) *int64 {
+	j := int64(i)
+	return &j
+}
+
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-func work(i int, pods kcl.PodInterface, podName, namespace string, wg *sync.WaitGroup, t *time.Timer) {
+func work(i int, pods kcl.PodInterface, namespace string, wg *sync.WaitGroup, t *time.Timer) {
 	defer wg.Done()
 	for {
 		select {
@@ -26,9 +31,10 @@ func work(i int, pods kcl.PodInterface, podName, namespace string, wg *sync.Wait
 			return
 		default:
 		}
+		podName := fmt.Sprintf("work-pod-%s", uuid.New())
 		pod := &api.Pod{
 			ObjectMeta: api.ObjectMeta{
-				Name:      fmt.Sprintf("%s-%s", podName, uuid.New()),
+				Name:      podName,
 				Namespace: namespace,
 			},
 			Spec: api.PodSpec{
@@ -36,7 +42,7 @@ func work(i int, pods kcl.PodInterface, podName, namespace string, wg *sync.Wait
 					api.Container{
 						Name:            "alpine-echo",
 						Image:           "alpine:3.3",
-						Command:         []string{"echo", fmt.Sprintf(`"hello k8stress pod %d"`, i)},
+						Command:         []string{"echo", fmt.Sprintf(`"hello k8stress pod %s"`, podName)},
 						ImagePullPolicy: api.PullIfNotPresent,
 					},
 				},
@@ -44,10 +50,14 @@ func work(i int, pods kcl.PodInterface, podName, namespace string, wg *sync.Wait
 		}
 		newPod, err := pods.Create(pod)
 		if err != nil {
-			log.Printf("Error creating pod %d (%s)", i, err)
+			log.Printf("Error creating pod #%d %s (%s)", i, podName, err)
 			return
 		}
-		log.Printf("New pod #%d created: %+v", i, *newPod)
+		log.Printf("New pod %s created: %+v", podName, *newPod)
+		log.Printf("Deleting pod %s", podName)
+		if err := pods.Delete(podName, &api.DeleteOptions{GracePeriodSeconds: i64(0)}); err != nil {
+			log.Printf("Error deleting pod #%d %s (%s)", i, podName, err)
+		}
 	}
 }
 
@@ -71,8 +81,7 @@ func main() {
 	defer timer.Stop()
 	for i := 0; i < conf.NumGoroutines; i++ {
 		wg.Add(1)
-		podName := fmt.Sprintf("k8stress-pod-%s-%d", host, i)
-		go work(i, pods, podName, conf.Namespace, &wg, timer)
+		go work(i, pods, conf.Namespace, &wg, timer)
 	}
 	log.Printf("Done creating %d goroutines", conf.NumGoroutines)
 	wg.Wait()
