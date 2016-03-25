@@ -28,6 +28,7 @@ func work(i int, pods kcl.PodInterface, namespace string, wg *sync.WaitGroup, t 
 	for {
 		select {
 		case <-t.C:
+			log.Printf("Goroutine %d done, returning", i)
 			return
 		default:
 		}
