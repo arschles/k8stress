@@ -59,6 +59,7 @@ func work(i int, pods kcl.PodInterface, namespace string, wg *sync.WaitGroup, t 
 		if err := pods.Delete(podName, &api.DeleteOptions{GracePeriodSeconds: i64(0)}); err != nil {
 			log.Printf("Error deleting pod #%d %s (%s)", i, podName, err)
 		}
+		time.Sleep(1 * time.Second)
 	}
 }
 
