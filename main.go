@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"sync"
 
 	"github.com/kelseyhightower/envconfig"
 	"k8s.io/kubernetes/pkg/api"
@@ -17,9 +18,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error creating new Kubernetes client (%s)", err)
 	}
+	log.Printf("Running with config %s", conf)
 	pods := client.Pods(conf.Namespace)
+	var wg sync.WaitGroup
 	for i := 0; i < conf.NumGoroutines; i++ {
+		wg.Add(1)
 		go func(i int) {
+			defer wg.Done()
 			pod := &api.Pod{}
 			newPod, err := pods.Create(pod)
 			if err != nil {
@@ -29,4 +34,6 @@ func main() {
 			log.Printf("New pod #%d created:\n%+v", i, *newPod)
 		}(i)
 	}
+	wg.Wait()
+	log.Printf("Done creating %d pods", conf.NumGoroutines)
 }
